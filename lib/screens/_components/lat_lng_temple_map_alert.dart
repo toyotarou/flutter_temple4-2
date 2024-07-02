@@ -185,7 +185,10 @@ class _LatLngTempleDisplayAlertState
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Container(),
+                  IconButton(
+                    onPressed: () {},
+                    icon: Icon(Icons.train),
+                  ),
                   IconButton(
                     onPressed: () {
                       mapController.move(currentCenter, 13);
