@@ -11,10 +11,12 @@ import '../../models/tokyo_station_model.dart';
 import '../../state/lat_lng_temple/lat_lng_temple.dart';
 import '../../state/routing/routing.dart';
 import '../../state/tokyo_train/tokyo_train.dart';
+import '../../utility/utility.dart';
 import '../_parts/_caution_dialog.dart';
 import '../_parts/_temple_dialog.dart';
 import '../function.dart';
 import 'goal_station_setting_alert.dart';
+import 'not_reach_temple_train_select_alert.dart';
 import 'route_display_setting_alert.dart';
 import 'temple_info_display_alert.dart';
 
@@ -45,6 +47,10 @@ class _LatLngTempleDisplayAlertState
   MapController mapController = MapController();
   late LatLng currentCenter;
 
+  List<Polyline> polylineList = [];
+
+  Utility utility = Utility();
+
   ///
   @override
   void initState() {
@@ -59,9 +65,6 @@ class _LatLngTempleDisplayAlertState
   ///
   @override
   Widget build(BuildContext context) {
-    final routingTempleDataList = ref
-        .watch(routingProvider.select((value) => value.routingTempleDataList));
-
     //------------------// goal
     final tokyoTrainState = ref.watch(tokyoTrainProvider);
 
@@ -117,6 +120,8 @@ class _LatLngTempleDisplayAlertState
 
     makeMarker();
 
+    makePolylineList();
+
     return (boundsLatLngMap.isNotEmpty)
         ? Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -164,20 +169,7 @@ class _LatLngTempleDisplayAlertState
                       urlTemplate:
                           'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
                     ),
-                    PolylineLayer(
-                      polylines: [
-                        Polyline(
-                          points: routingTempleDataList.map((e) {
-                            return LatLng(
-                              e.latitude.toDouble(),
-                              e.longitude.toDouble(),
-                            );
-                          }).toList(),
-                          color: Colors.redAccent,
-                          strokeWidth: 5,
-                        ),
-                      ],
-                    ),
+                    PolylineLayer(polylines: polylineList),
                     MarkerLayer(markers: markerList),
                   ],
                 ),
@@ -186,8 +178,17 @@ class _LatLngTempleDisplayAlertState
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   IconButton(
-                    onPressed: () {},
-                    icon: Icon(Icons.train),
+                    onPressed: () {
+                      mapController.move(currentCenter, 10);
+
+                      TempleDialog(
+                        context: context,
+                        widget: const NotReachTempleTrainSelectAlert(),
+                        paddingRight: context.screenSize.width * 0.2,
+                        clearBarrierColor: true,
+                      );
+                    },
+                    icon: const Icon(Icons.train, color: Colors.white),
                   ),
                   IconButton(
                     onPressed: () {
@@ -468,5 +469,62 @@ class _LatLngTempleDisplayAlertState
             'No Routing',
             style: TextStyle(color: Colors.white.withOpacity(0.6)),
           );
+  }
+
+  void makePolylineList() {
+    /*
+
+                        PolylineLayer(
+                      polylines: [
+                        Polyline(
+                          points: routingTempleDataList.map((e) {
+                            return LatLng(
+                              e.latitude.toDouble(),
+                              e.longitude.toDouble(),
+                            );
+                          }).toList(),
+                          color: Colors.redAccent,
+                          strokeWidth: 5,
+                        ),
+                      ],
+                    ),
+
+
+    */
+
+    polylineList = [];
+
+    final routingTempleDataList = ref
+        .watch(routingProvider.select((value) => value.routingTempleDataList));
+
+    final points = <LatLng>[];
+    routingTempleDataList.forEach((element) {
+      points.add(
+          LatLng(element.latitude.toDouble(), element.longitude.toDouble()));
+    });
+
+    if (points.isNotEmpty) {
+      polylineList.add(
+          Polyline(points: points, color: Colors.redAccent, strokeWidth: 5));
+    }
+
+    final num = polylineList.length;
+
+    final tokyoTrainState = ref.watch(tokyoTrainProvider);
+
+    final twelveColor = utility.getTwelveColor();
+
+    for (var i = 0; i < tokyoTrainState.selectTrainList.length; i++) {
+      final map =
+          tokyoTrainState.tokyoTrainIdMap[tokyoTrainState.selectTrainList[i]];
+
+      final points = <LatLng>[];
+      map?.station.forEach((element2) =>
+          points.add(LatLng(element2.lat.toDouble(), element2.lng.toDouble())));
+
+      polylineList.add(
+        Polyline(points: points, color: twelveColor[i + num], strokeWidth: 5),
+      );
+    }
   }
 }
