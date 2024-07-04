@@ -29,6 +29,7 @@ dependencies:
   flutter_map: ^3.1.0
   flutter_polyline_points: ^1.0.0
   http: ^0.13.5
+  flutter_map_animations: ^0.2.2
   # 旧バージョンのflutter_mapを使うための設定
 
 dev_dependencies:

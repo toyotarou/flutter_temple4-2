@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:flutter_map_animations/flutter_map_animations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:latlong2/latlong.dart';
 
@@ -32,8 +34,8 @@ class LatLngTempleMapAlert extends ConsumerStatefulWidget {
       _LatLngTempleDisplayAlertState();
 }
 
-class _LatLngTempleDisplayAlertState
-    extends ConsumerState<LatLngTempleMapAlert> {
+class _LatLngTempleDisplayAlertState extends ConsumerState<LatLngTempleMapAlert>
+    with TickerProviderStateMixin {
   List<TempleData> templeDataList = [];
 
   Map<String, double> boundsLatLngMap = {};
@@ -44,7 +46,7 @@ class _LatLngTempleDisplayAlertState
 
   List<int> reachedTempleIds = [];
 
-  MapController mapController = MapController();
+  late final _animatedMapController = AnimatedMapController(vsync: this);
   late LatLng currentCenter;
 
   List<Polyline> polylineList = [];
@@ -60,6 +62,13 @@ class _LatLngTempleDisplayAlertState
 
     currentCenter =
         LatLng(widget.station!.lat.toDouble(), widget.station!.lng.toDouble());
+  }
+
+  ///
+  @override
+  void dispose() {
+    _animatedMapController.dispose();
+    super.dispose();
   }
 
   ///
@@ -149,7 +158,7 @@ class _LatLngTempleDisplayAlertState
               ],
               Expanded(
                 child: FlutterMap(
-                  mapController: mapController,
+                  mapController: _animatedMapController,
                   options: MapOptions(
                     bounds: LatLngBounds(
                       LatLng(
@@ -179,7 +188,7 @@ class _LatLngTempleDisplayAlertState
                 children: [
                   IconButton(
                     onPressed: () {
-                      mapController.move(currentCenter, 10);
+                      _animatedMapController.move(currentCenter, 10);
 
                       TempleDialog(
                         context: context,
@@ -190,14 +199,36 @@ class _LatLngTempleDisplayAlertState
                     },
                     icon: const Icon(Icons.train, color: Colors.white),
                   ),
-                  IconButton(
-                    onPressed: () {
-                      mapController.move(currentCenter, 13);
-                    },
-                    icon: const Icon(
-                      Icons.center_focus_strong,
-                      color: Colors.white,
-                    ),
+                  Row(
+                    children: [
+                      IconButton(
+                        onPressed: () {
+                          _animatedMapController.move(currentCenter, 13);
+                        },
+                        icon: const Icon(
+                          Icons.center_focus_strong,
+                          color: Colors.white,
+                        ),
+                      ),
+                      IconButton(
+                        onPressed: () {
+                          _animatedMapController.animatedZoomIn();
+                        },
+                        icon: const Icon(
+                          FontAwesomeIcons.plus,
+                          color: Colors.white,
+                        ),
+                      ),
+                      IconButton(
+                        onPressed: () {
+                          _animatedMapController.animatedZoomOut();
+                        },
+                        icon: const Icon(
+                          FontAwesomeIcons.minus,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
@@ -472,26 +503,6 @@ class _LatLngTempleDisplayAlertState
   }
 
   void makePolylineList() {
-    /*
-
-                        PolylineLayer(
-                      polylines: [
-                        Polyline(
-                          points: routingTempleDataList.map((e) {
-                            return LatLng(
-                              e.latitude.toDouble(),
-                              e.longitude.toDouble(),
-                            );
-                          }).toList(),
-                          color: Colors.redAccent,
-                          strokeWidth: 5,
-                        ),
-                      ],
-                    ),
-
-
-    */
-
     polylineList = [];
 
     final routingTempleDataList = ref

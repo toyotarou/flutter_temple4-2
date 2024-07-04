@@ -350,6 +350,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.1.0"
+  flutter_map_animations:
+    dependency: "direct main"
+    description:
+      name: flutter_map_animations
+      sha256: a780978a2904bc60eb22ea37afba287108e81572af87cfce84d65d40c49add79
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.2.2"
   flutter_native_splash:
     dependency: "direct main"
     description:
