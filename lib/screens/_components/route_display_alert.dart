@@ -14,9 +14,13 @@ class RouteDisplayAlert extends ConsumerStatefulWidget {
 }
 
 class _RouteDisplayAlertState extends ConsumerState<RouteDisplayAlert> {
+  int totalTime = 0;
+
   ///
   @override
   Widget build(BuildContext context) {
+    getTotalTime();
+
     return AlertDialog(
       titlePadding: EdgeInsets.zero,
       contentPadding: EdgeInsets.zero,
@@ -51,6 +55,13 @@ class _RouteDisplayAlertState extends ConsumerState<RouteDisplayAlert> {
               Divider(
                 color: Colors.white.withOpacity(0.5),
                 thickness: 5,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(),
+                  Text('$totalTime min.'),
+                ],
               ),
               Expanded(child: displayRoute()),
             ],
@@ -204,5 +215,54 @@ class _RouteDisplayAlertState extends ConsumerState<RouteDisplayAlert> {
     final timeFormat = DateFormat('HH:mm');
 
     return timeFormat.format(dt);
+  }
+
+  ///
+  void getTotalTime() {
+    totalTime = 0;
+
+    final routingState = ref.watch(routingProvider);
+
+    final record = routingState.routingTempleDataList;
+
+    final totalMinuteList = <int>[];
+
+    for (var i = 0; i < record.length; i++) {
+      var distance = '';
+      var walkMinutes = 0;
+      if (i < record.length - 1) {
+        if ((record[i].latitude == record[i + 1].latitude) &&
+            (record[i].longitude == record[i + 1].longitude)) {
+        } else {
+          distance = calcDistance(
+            originLat: record[i].latitude.toDouble(),
+            originLng: record[i].longitude.toDouble(),
+            destLat: record[i + 1].latitude.toDouble(),
+            destLng: record[i + 1].longitude.toDouble(),
+          );
+        }
+
+        final dist1000 = int.parse(
+          (double.parse(distance) * 1000).toString().split('.')[0],
+        );
+        final ws = routingState.walkSpeed * 1000;
+        final percent = (100 + routingState.adjustPercent) / 100;
+        walkMinutes = ((dist1000 / ws * 60) * percent).round();
+      }
+
+      final exMark = record[i].mark.split('-');
+
+      if (exMark.length == 1) {
+        totalMinuteList.add(routingState.spotStayTime);
+      }
+
+      if (walkMinutes != 0) {
+        totalMinuteList.add(walkMinutes);
+      }
+    }
+
+    totalMinuteList.forEach((element) {
+      totalTime += element;
+    });
   }
 }
