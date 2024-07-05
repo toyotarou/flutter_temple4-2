@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../extensions/extensions.dart';
+import '../../models/temple_list_model.dart';
 import '../../models/temple_model.dart';
 import '../../models/tokyo_station_model.dart';
 import '../../models/tokyo_train_model.dart';
@@ -23,6 +24,7 @@ class TempleTrainStationListAlert extends ConsumerStatefulWidget {
     required this.tokyoTrainList,
     required this.tokyoStationMap,
     required this.tokyoTrainIdMap,
+    required this.templeListMap,
   });
 
   final Map<String, List<String>> templeVisitDateMap;
@@ -30,6 +32,7 @@ class TempleTrainStationListAlert extends ConsumerStatefulWidget {
   final List<TokyoTrainModel> tokyoTrainList;
   final Map<String, TokyoStationModel> tokyoStationMap;
   final Map<int, TokyoTrainModel> tokyoTrainIdMap;
+  final Map<String, TempleListModel> templeListMap;
 
   @override
   ConsumerState<TempleTrainStationListAlert> createState() =>
@@ -145,6 +148,7 @@ class _TempleTrainListAlertState
                           tokyoTrainIdMap: widget.tokyoTrainIdMap,
                           templeVisitDateMap: widget.templeVisitDateMap,
                           dateTempleMap: widget.dateTempleMap,
+                          templeListMap: widget.templeListMap,
                         ),
                       );
                     },

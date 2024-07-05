@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../extensions/extensions.dart';
+import '../../models/temple_list_model.dart';
 import '../../models/temple_model.dart';
 import '../../state/temple/temple.dart';
 import '../../state/temple_lat_lng/temple_lat_lng.dart';
@@ -14,11 +15,12 @@ class VisitedTempleListAlert extends ConsumerStatefulWidget {
     super.key,
     required this.templeVisitDateMap,
     required this.dateTempleMap,
+    required this.templeListMap,
   });
 
   final Map<String, List<String>> templeVisitDateMap;
-
   final Map<String, TempleModel> dateTempleMap;
+  final Map<String, TempleListModel> templeListMap;
 
   @override
   ConsumerState<VisitedTempleListAlert> createState() =>
@@ -282,6 +284,7 @@ class _VisitedTempleListAlertState
                 widget: VisitedTempleMapAlert(
                   templeVisitDateMap: widget.templeVisitDateMap,
                   dateTempleMap: widget.dateTempleMap,
+                  templeListMap: widget.templeListMap,
                 ),
                 clearBarrierColor: true,
               );
@@ -356,6 +359,7 @@ class _VisitedTempleListAlertState
                 widget: VisitedTempleMapAlert(
                   templeVisitDateMap: widget.templeVisitDateMap,
                   dateTempleMap: widget.dateTempleMap,
+                  templeListMap: widget.templeListMap,
                 ),
                 clearBarrierColor: true,
               );

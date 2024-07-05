@@ -29,6 +29,7 @@ class NotReachTempleMapAlert extends ConsumerStatefulWidget {
     required this.tokyoTrainList,
     required this.templeVisitDateMap,
     required this.dateTempleMap,
+    required this.templeListMap,
   });
 
   final List<TempleListModel> templeListList;
@@ -37,6 +38,7 @@ class NotReachTempleMapAlert extends ConsumerStatefulWidget {
   final List<TokyoTrainModel> tokyoTrainList;
   final Map<String, List<String>> templeVisitDateMap;
   final Map<String, TempleModel> dateTempleMap;
+  final Map<String, TempleListModel> templeListMap;
 
   @override
   ConsumerState<NotReachTempleMapAlert> createState() =>
@@ -219,6 +221,7 @@ class _NotReachTempleMapAlertState
                     from: 'NotReachTempleMapAlert',
                     templeVisitDateMap: widget.templeVisitDateMap,
                     dateTempleMap: widget.dateTempleMap,
+                    templeListMap: widget.templeListMap,
                   ),
                   paddingTop: context.screenSize.height * 0.6,
                   clearBarrierColor: true,

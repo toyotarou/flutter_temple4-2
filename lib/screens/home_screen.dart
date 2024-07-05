@@ -194,6 +194,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     final tokyoStationMap =
         ref.read(tokyoTrainProvider.select((value) => value.tokyoStationMap));
 
+    var templeListMap =
+        ref.watch(templeListProvider.select((value) => value.templeListMap));
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -214,6 +217,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   widget: VisitedTempleMapAlert(
                     templeVisitDateMap: templeVisitDateMap,
                     dateTempleMap: dateTempleMap,
+                    templeListMap: templeListMap,
                   ),
                   clearBarrierColor: true,
                 );
@@ -239,6 +243,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     tokyoStationMap: tokyoStationMap,
                     tokyoTrainIdMap: tokyoTrainIdMap,
                     tokyoTrainList: tokyoTrainList,
+                    templeListMap: templeListMap,
                   ),
                 ),
                 icon: const Icon(Icons.train, color: Colors.white),
@@ -253,6 +258,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     tokyoTrainList: tokyoTrainList,
                     templeVisitDateMap: templeVisitDateMap,
                     dateTempleMap: dateTempleMap,
+                    templeListMap: templeListMap,
                   ),
                 ),
                 icon:

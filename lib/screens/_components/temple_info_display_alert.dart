@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../extensions/extensions.dart';
 import '../../models/common/temple_data.dart';
+import '../../models/temple_list_model.dart';
 import '../../models/temple_model.dart';
 import '../../models/tokyo_station_model.dart';
 import '../../state/routing/routing.dart';
@@ -19,6 +20,7 @@ class TempleInfoDisplayAlert extends ConsumerStatefulWidget {
     this.station,
     required this.templeVisitDateMap,
     required this.dateTempleMap,
+    required this.templeListMap,
   });
 
   final TempleData temple;
@@ -26,6 +28,7 @@ class TempleInfoDisplayAlert extends ConsumerStatefulWidget {
   final TokyoStationModel? station;
   final Map<String, List<String>> templeVisitDateMap;
   final Map<String, TempleModel> dateTempleMap;
+  final Map<String, TempleListModel> templeListMap;
 
   @override
   ConsumerState<TempleInfoDisplayAlert> createState() =>
@@ -204,13 +207,9 @@ class _TempleInfoDisplayAlertState
       return Container();
     }
 
-    final templeListMap =
-        ref.watch(templeListProvider.select((value) => value.templeListMap));
-
-    if (templeListMap[widget.temple.name] != null) {
-      if (templeListMap[widget.temple.name]?.nearStation != '') {
-        templeListMap[widget.temple.name]
-            ?.nearStation
+    if (widget.templeListMap[widget.temple.name] != null) {
+      if (widget.templeListMap[widget.temple.name]?.nearStation != '') {
+        widget.templeListMap[widget.temple.name]?.nearStation
             .split(',')
             .forEach((element) {
           // final exElement = element.trim().split('-');
