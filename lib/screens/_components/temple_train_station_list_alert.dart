@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../extensions/extensions.dart';
+import '../../models/station_model.dart';
 import '../../models/temple_list_model.dart';
 import '../../models/temple_model.dart';
 import '../../models/tokyo_station_model.dart';

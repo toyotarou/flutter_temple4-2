@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../extensions/extensions.dart';
+import '../../models/station_model.dart';
 import '../../models/temple_list_model.dart';
 import '../../models/temple_model.dart';
+import '../../models/tokyo_station_model.dart';
 import '../../state/temple/temple.dart';
 import '../../state/temple_lat_lng/temple_lat_lng.dart';
 import '../_parts/_temple_dialog.dart';
@@ -16,11 +18,15 @@ class VisitedTempleListAlert extends ConsumerStatefulWidget {
     required this.templeVisitDateMap,
     required this.dateTempleMap,
     required this.templeListMap,
+    required this.stationMap,
+    required this.tokyoStationMap,
   });
 
   final Map<String, List<String>> templeVisitDateMap;
   final Map<String, TempleModel> dateTempleMap;
   final Map<String, TempleListModel> templeListMap;
+  final Map<String, StationModel> stationMap;
+  final Map<String, TokyoStationModel> tokyoStationMap;
 
   @override
   ConsumerState<VisitedTempleListAlert> createState() =>
@@ -285,6 +291,8 @@ class _VisitedTempleListAlertState
                   templeVisitDateMap: widget.templeVisitDateMap,
                   dateTempleMap: widget.dateTempleMap,
                   templeListMap: widget.templeListMap,
+                  stationMap: widget.stationMap,
+                  tokyoStationMap: widget.tokyoStationMap,
                 ),
                 clearBarrierColor: true,
               );
@@ -360,6 +368,8 @@ class _VisitedTempleListAlertState
                   templeVisitDateMap: widget.templeVisitDateMap,
                   dateTempleMap: widget.dateTempleMap,
                   templeListMap: widget.templeListMap,
+                  stationMap: widget.stationMap,
+                  tokyoStationMap: widget.tokyoStationMap,
                 ),
                 clearBarrierColor: true,
               );

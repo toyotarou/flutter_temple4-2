@@ -197,6 +197,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     var templeListMap =
         ref.watch(templeListProvider.select((value) => value.templeListMap));
 
+    var stationMap =
+        ref.watch(stationProvider.select((value) => value.stationMap));
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -218,6 +221,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     templeVisitDateMap: templeVisitDateMap,
                     dateTempleMap: dateTempleMap,
                     templeListMap: templeListMap,
+                    stationMap: stationMap,
+                    tokyoStationMap: tokyoStationMap,
                   ),
                   clearBarrierColor: true,
                 );
@@ -259,6 +264,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     templeVisitDateMap: templeVisitDateMap,
                     dateTempleMap: dateTempleMap,
                     templeListMap: templeListMap,
+                    tokyoStationMap: tokyoStationMap,
                   ),
                 ),
                 icon:

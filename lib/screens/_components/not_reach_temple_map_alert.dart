@@ -6,10 +6,12 @@ import 'package:latlong2/latlong.dart';
 
 import '../../extensions/extensions.dart';
 import '../../models/common/temple_data.dart';
+import '../../models/station_model.dart';
 import '../../models/temple_lat_lng_model.dart';
 import '../../models/temple_list_model.dart';
 
 import '../../models/temple_model.dart';
+import '../../models/tokyo_station_model.dart';
 import '../../models/tokyo_train_model.dart';
 
 //selectTrainList
@@ -30,6 +32,7 @@ class NotReachTempleMapAlert extends ConsumerStatefulWidget {
     required this.templeVisitDateMap,
     required this.dateTempleMap,
     required this.templeListMap,
+    required this.tokyoStationMap,
   });
 
   final List<TempleListModel> templeListList;
@@ -39,6 +42,7 @@ class NotReachTempleMapAlert extends ConsumerStatefulWidget {
   final Map<String, List<String>> templeVisitDateMap;
   final Map<String, TempleModel> dateTempleMap;
   final Map<String, TempleListModel> templeListMap;
+  final Map<String, TokyoStationModel> tokyoStationMap;
 
   @override
   ConsumerState<NotReachTempleMapAlert> createState() =>
@@ -222,6 +226,7 @@ class _NotReachTempleMapAlertState
                     templeVisitDateMap: widget.templeVisitDateMap,
                     dateTempleMap: widget.dateTempleMap,
                     templeListMap: widget.templeListMap,
+                    tokyoStationMap: widget.tokyoStationMap,
                   ),
                   paddingTop: context.screenSize.height * 0.6,
                   clearBarrierColor: true,
