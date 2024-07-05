@@ -14,7 +14,6 @@ import '../../models/tokyo_station_model.dart';
 import '../../models/tokyo_train_model.dart';
 import '../../state/lat_lng_temple/lat_lng_temple.dart';
 import '../../state/routing/routing.dart';
-import '../../state/temple/temple.dart';
 import '../../state/tokyo_train/tokyo_train.dart';
 import '../../utility/utility.dart';
 import '../_parts/_caution_dialog.dart';
@@ -412,7 +411,7 @@ class _LatLngTempleDisplayAlertState extends ConsumerState<LatLngTempleMapAlert>
                             templeVisitDateMap: widget.templeVisitDateMap,
                             dateTempleMap: widget.dateTempleMap,
                           ),
-                          paddingTop: context.screenSize.height * 0.7,
+                          paddingTop: context.screenSize.height * 0.6,
                           clearBarrierColor: true,
                         );
                       }

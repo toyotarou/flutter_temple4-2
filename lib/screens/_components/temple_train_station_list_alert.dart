@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_temple4/state/temple_list/temple_list.dart';
 
 import '../../extensions/extensions.dart';
 import '../../models/temple_model.dart';
+import '../../models/tokyo_station_model.dart';
+import '../../models/tokyo_train_model.dart';
 import '../../state/lat_lng_temple/lat_lng_temple.dart';
 import '../../state/routing/routing.dart';
-import '../../state/tokyo_train/tokyo_train.dart';
+import '../../state/temple_list/temple_list.dart';
+
+//import '../../state/tokyo_train/tokyo_train.dart';
 import '../_parts/_caution_dialog.dart';
 import '../_parts/_temple_dialog.dart';
 import 'lat_lng_temple_map_alert.dart';
@@ -17,10 +20,16 @@ class TempleTrainStationListAlert extends ConsumerStatefulWidget {
     super.key,
     required this.templeVisitDateMap,
     required this.dateTempleMap,
+    required this.tokyoTrainList,
+    required this.tokyoStationMap,
+    required this.tokyoTrainIdMap,
   });
 
   final Map<String, List<String>> templeVisitDateMap;
   final Map<String, TempleModel> dateTempleMap;
+  final List<TokyoTrainModel> tokyoTrainList;
+  final Map<String, TokyoStationModel> tokyoStationMap;
+  final Map<int, TokyoTrainModel> tokyoTrainIdMap;
 
   @override
   ConsumerState<TempleTrainStationListAlert> createState() =>
@@ -36,7 +45,7 @@ class _TempleTrainListAlertState
   void initState() {
     super.initState();
 
-    ref.read(tokyoTrainProvider.notifier).getTokyoTrain();
+//    ref.read(tokyoTrainProvider.notifier).getTokyoTrain();
   }
 
   ///
@@ -75,7 +84,7 @@ class _TempleTrainListAlertState
 
   ///
   Widget displayTempleTrainStationListButton() {
-    final tokyoTrainState = ref.watch(tokyoTrainProvider);
+//    final tokyoTrainState = ref.watch(tokyoTrainProvider);
 
     final startStationId =
         ref.watch(routingProvider.select((value) => value.startStationId));
@@ -83,7 +92,7 @@ class _TempleTrainListAlertState
     final latLngTempleList = ref
         .watch(latLngTempleProvider.select((value) => value.latLngTempleList));
 
-    var templeStationMap =
+    final templeStationMap =
         ref.watch(templeListProvider.select((value) => value.templeStationMap));
 
     return Row(
@@ -97,7 +106,7 @@ class _TempleTrainListAlertState
                 TempleDialog(
                   context: context,
                   widget: NotReachTempleStationListAlert(
-                    tokyoTrainList: tokyoTrainState.tokyoTrainList,
+                    tokyoTrainList: widget.tokyoTrainList,
                     templeStationMap: templeStationMap,
                   ),
                   paddingLeft: context.screenSize.width * 0.2,
@@ -130,11 +139,10 @@ class _TempleTrainListAlertState
                         context: context,
                         widget: LatLngTempleMapAlert(
                           templeList: latLngTempleList,
-                          station:
-                              tokyoTrainState.tokyoStationMap[startStationId],
-                          tokyoTrainList: tokyoTrainState.tokyoTrainList,
-                          tokyoStationMap: tokyoTrainState.tokyoStationMap,
-                          tokyoTrainIdMap: tokyoTrainState.tokyoTrainIdMap,
+                          station: widget.tokyoStationMap[startStationId],
+                          tokyoTrainList: widget.tokyoTrainList,
+                          tokyoStationMap: widget.tokyoStationMap,
+                          tokyoTrainIdMap: widget.tokyoTrainIdMap,
                           templeVisitDateMap: widget.templeVisitDateMap,
                           dateTempleMap: widget.dateTempleMap,
                         ),
@@ -155,7 +163,7 @@ class _TempleTrainListAlertState
 
   ///
   Widget displaySelectedStation() {
-    final tokyoTrainState = ref.watch(tokyoTrainProvider);
+//    final tokyoTrainState = ref.watch(tokyoTrainProvider);
 
     final startStationId =
         ref.watch(routingProvider.select((value) => value.startStationId));
@@ -169,8 +177,8 @@ class _TempleTrainListAlertState
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
-          (tokyoTrainState.tokyoStationMap[startStationId] != null)
-              ? tokyoTrainState.tokyoStationMap[startStationId]!.stationName
+          (widget.tokyoStationMap[startStationId] != null)
+              ? widget.tokyoStationMap[startStationId]!.stationName
               : '-----',
         ),
         Column(
@@ -190,7 +198,7 @@ class _TempleTrainListAlertState
 
   ///
   Widget displayTokyoTrainList() {
-    final tokyoTrainState = ref.watch(tokyoTrainProvider);
+//    final tokyoTrainState = ref.watch(tokyoTrainProvider);
 
     final startStationId =
         ref.watch(routingProvider.select((value) => value.startStationId));
@@ -199,7 +207,7 @@ class _TempleTrainListAlertState
       child: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: tokyoTrainState.tokyoTrainList.map((e) {
+          children: widget.tokyoTrainList.map((e) {
             return ExpansionTile(
               collapsedIconColor: Colors.white,
               title: Text(

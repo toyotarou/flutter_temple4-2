@@ -17,8 +17,6 @@ class TemplePhotoGalleryAlert extends ConsumerStatefulWidget {
 
 class _TemplePhotoGalleryAlertState
     extends ConsumerState<TemplePhotoGalleryAlert> {
-//  final controller = PageController(viewportFraction: 0.9);
-
   late PageController pageController;
 
   ///

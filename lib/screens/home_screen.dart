@@ -47,6 +47,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
     ref.read(tokyoTrainProvider.notifier).getTokyoTrain();
 
+    ref.read(stationProvider.notifier).getAllStation();
+
     globalKeyList = List.generate(100, (index) => GlobalKey());
   }
 
@@ -171,23 +173,26 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   ///
   Widget displayHomeButton() {
-    var templeLatLngList = ref
+    final templeLatLngList = ref
         .watch(templeLatLngProvider.select((value) => value.templeLatLngList));
 
-    var templeListList =
+    final templeListList =
         ref.watch(templeListProvider.select((value) => value.templeListList));
 
-    var tokyoTrainIdMap =
+    final tokyoTrainIdMap =
         ref.watch(tokyoTrainProvider.select((value) => value.tokyoTrainIdMap));
 
-    var tokyoTrainList =
+    final tokyoTrainList =
         ref.watch(tokyoTrainProvider.select((value) => value.tokyoTrainList));
 
-    var templeVisitDateMap =
+    final templeVisitDateMap =
         ref.watch(templeProvider.select((value) => value.templeVisitDateMap));
 
-    var dateTempleMap =
+    final dateTempleMap =
         ref.watch(templeProvider.select((value) => value.dateTempleMap));
+
+    final tokyoStationMap =
+        ref.read(tokyoTrainProvider.select((value) => value.tokyoStationMap));
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -231,6 +236,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   widget: TempleTrainStationListAlert(
                     templeVisitDateMap: templeVisitDateMap,
                     dateTempleMap: dateTempleMap,
+                    tokyoStationMap: tokyoStationMap,
+                    tokyoTrainIdMap: tokyoTrainIdMap,
+                    tokyoTrainList: tokyoTrainList,
                   ),
                 ),
                 icon: const Icon(Icons.train, color: Colors.white),
@@ -371,12 +379,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       {required TempleModel data, required String selectYear}) {
     final templeState = ref.watch(templeProvider);
 
-    var stationMap =
-        ref.watch(stationProvider.select((value) => value.stationMap));
-
-    var templeLatLngMap = ref
-        .watch(templeLatLngProvider.select((value) => value.templeLatLngMap));
-
     return Card(
       color: Colors.black.withOpacity(0.3),
       child: ListTile(
@@ -427,11 +429,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             GestureDetector(
               onTap: () => TempleDialog(
                 context: context,
-                widget: TempleDetailMapAlert(
-                  date: data.date,
-                  stationMap: stationMap,
-                  templeLatLngMap: templeLatLngMap,
-                ),
+                widget: TempleDetailMapAlert(date: data.date),
               ),
               child: const Icon(
                 Icons.call_made,

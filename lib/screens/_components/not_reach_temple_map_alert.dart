@@ -220,7 +220,7 @@ class _NotReachTempleMapAlertState
                     templeVisitDateMap: widget.templeVisitDateMap,
                     dateTempleMap: widget.dateTempleMap,
                   ),
-                  paddingTop: context.screenSize.height * 0.7,
+                  paddingTop: context.screenSize.height * 0.6,
                   clearBarrierColor: true,
                 );
               },
