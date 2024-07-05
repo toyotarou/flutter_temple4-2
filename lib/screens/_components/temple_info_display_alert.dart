@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_temple4/screens/_components/visited_temple_photo_alert.dart';
-import 'package:flutter_temple4/screens/_parts/_temple_dialog.dart';
+import 'package:flutter_temple4/state/station/station.dart';
+import 'package:flutter_temple4/state/temple_list/temple_list.dart';
 
 import '../../extensions/extensions.dart';
 import '../../models/common/temple_data.dart';
 import '../../models/tokyo_station_model.dart';
 import '../../state/routing/routing.dart';
 import '../../state/temple/temple.dart';
+import '../_parts/_temple_dialog.dart';
 import '../function.dart';
+import 'visited_temple_photo_alert.dart';
 
 class TempleInfoDisplayAlert extends ConsumerStatefulWidget {
   const TempleInfoDisplayAlert(
@@ -31,6 +33,8 @@ class _TempleInfoDisplayAlertState
     super.initState();
 
     ref.read(templeProvider.notifier).getAllTemple();
+
+    ref.read(stationProvider.notifier).getAllStation();
   }
 
   ///
@@ -48,10 +52,12 @@ class _TempleInfoDisplayAlertState
         child: DefaultTextStyle(
           style: const TextStyle(fontSize: 12),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 20),
               displayTempleInfo(),
               displayAddRemoveRoutingButton(),
+              displayNearStationInfo(),
             ],
           ),
         ),
@@ -198,5 +204,32 @@ class _TempleInfoDisplayAlertState
         ),
       ),
     );
+  }
+
+  ///
+  Widget displayNearStationInfo() {
+    if (widget.from != 'NotReachTempleMapAlert') {
+      return Container();
+    }
+
+    final stationMap =
+        ref.watch(stationProvider.select((value) => value.stationMap));
+
+    final templeListMap =
+        ref.watch(templeListProvider.select((value) => value.templeListMap));
+
+    if (templeListMap[widget.temple.name] != null) {
+      if (templeListMap[widget.temple.name]?.nearStation != '') {
+        templeListMap[widget.temple.name]
+            ?.nearStation
+            .split(',')
+            .forEach((element) {
+          final exElement = element.trim().split('-');
+          print(stationMap[exElement[1]]?.stationName);
+        });
+      }
+    }
+
+    return Text(widget.from);
   }
 }
