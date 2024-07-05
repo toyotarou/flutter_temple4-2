@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_temple4/state/temple_list/temple_list.dart';
 
 import '../../extensions/extensions.dart';
 import '../../state/lat_lng_temple/lat_lng_temple.dart';
@@ -74,6 +75,9 @@ class _TempleTrainListAlertState
     final latLngTempleList = ref
         .watch(latLngTempleProvider.select((value) => value.latLngTempleList));
 
+    var templeStationMap =
+        ref.watch(templeListProvider.select((value) => value.templeStationMap));
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -84,7 +88,10 @@ class _TempleTrainListAlertState
               onPressed: () {
                 TempleDialog(
                   context: context,
-                  widget: const NotReachTempleStationListAlert(),
+                  widget: NotReachTempleStationListAlert(
+                    tokyoTrainList: tokyoTrainState.tokyoTrainList,
+                    templeStationMap: templeStationMap,
+                  ),
                   paddingLeft: context.screenSize.width * 0.2,
                 );
               },
@@ -119,6 +126,7 @@ class _TempleTrainListAlertState
                               tokyoTrainState.tokyoStationMap[startStationId],
                           tokyoTrainList: tokyoTrainState.tokyoTrainList,
                           tokyoStationMap: tokyoTrainState.tokyoStationMap,
+                          tokyoTrainIdMap: tokyoTrainState.tokyoTrainIdMap,
                         ),
                       );
                     },

@@ -1,6 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_temple4/state/temple_lat_lng/temple_lat_lng.dart';
+import 'package:flutter_temple4/state/temple_list/temple_list.dart';
+import 'package:flutter_temple4/state/tokyo_train/tokyo_train.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../extensions/extensions.dart';
@@ -36,6 +39,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     super.initState();
 
     ref.read(templeProvider.notifier).getAllTemple();
+
+    ref.read(templeLatLngProvider.notifier).getAllTempleLatLng();
+
+    ref.read(templeListProvider.notifier).getAllTempleListTemple();
+
+    ref.read(tokyoTrainProvider.notifier).getTokyoTrain();
 
     globalKeyList = List.generate(100, (index) => GlobalKey());
   }
@@ -161,6 +170,15 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   ///
   Widget displayHomeButton() {
+    var templeLatLngList = ref
+        .watch(templeLatLngProvider.select((value) => value.templeLatLngList));
+
+    var templeListList =
+        ref.watch(templeListProvider.select((value) => value.templeListList));
+
+    var tokyoTrainIdMap =
+        ref.watch(tokyoTrainProvider.select((value) => value.tokyoTrainIdMap));
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -204,7 +222,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               IconButton(
                 onPressed: () => TempleDialog(
                   context: context,
-                  widget: const NotReachTempleMapAlert(),
+                  widget: NotReachTempleMapAlert(
+                    templeLatLngList: templeLatLngList,
+                    templeListList: templeListList,
+                    tokyoTrainIdMap: tokyoTrainIdMap,
+                  ),
                 ),
                 icon:
                     const Icon(FontAwesomeIcons.toriiGate, color: Colors.white),

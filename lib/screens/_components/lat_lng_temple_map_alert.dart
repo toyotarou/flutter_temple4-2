@@ -30,6 +30,7 @@ class LatLngTempleMapAlert extends ConsumerStatefulWidget {
     this.station,
     required this.tokyoTrainList,
     required this.tokyoStationMap,
+    required this.tokyoTrainIdMap,
   });
 
   final List<LatLngTempleModel> templeList;
@@ -37,6 +38,7 @@ class LatLngTempleMapAlert extends ConsumerStatefulWidget {
 
   final List<TokyoTrainModel> tokyoTrainList;
   final Map<String, TokyoStationModel> tokyoStationMap;
+  final Map<int, TokyoTrainModel> tokyoTrainIdMap;
 
   @override
   ConsumerState<LatLngTempleMapAlert> createState() =>
@@ -67,7 +69,7 @@ class _LatLngTempleDisplayAlertState extends ConsumerState<LatLngTempleMapAlert>
   void initState() {
     super.initState();
 
-    ref.read(tokyoTrainProvider.notifier).getTokyoTrain();
+//    ref.read(tokyoTrainProvider.notifier).getTokyoTrain();
 
     currentCenter =
         LatLng(widget.station!.lat.toDouble(), widget.station!.lng.toDouble());
@@ -83,12 +85,8 @@ class _LatLngTempleDisplayAlertState extends ConsumerState<LatLngTempleMapAlert>
   ///
   @override
   Widget build(BuildContext context) {
-    //------------------// goal
-    final tokyoTrainState = ref.watch(tokyoTrainProvider);
-
     final goalStationId =
         ref.watch(routingProvider.select((value) => value.goalStationId));
-    //------------------// goal
 
     templeDataList = [];
 
@@ -115,8 +113,8 @@ class _LatLngTempleDisplayAlertState extends ConsumerState<LatLngTempleMapAlert>
       ));
     }
 
-    if (tokyoTrainState.tokyoStationMap[goalStationId] != null) {
-      final goal = tokyoTrainState.tokyoStationMap[goalStationId];
+    if (widget.tokyoStationMap[goalStationId] != null) {
+      final goal = widget.tokyoStationMap[goalStationId];
 
       templeDataList.add(
         TempleData(
@@ -251,12 +249,8 @@ class _LatLngTempleDisplayAlertState extends ConsumerState<LatLngTempleMapAlert>
     final routingTempleDataList = ref
         .watch(routingProvider.select((value) => value.routingTempleDataList));
 
-    //------------------// goal
-    final tokyoTrainState = ref.watch(tokyoTrainProvider);
-
     final goalStationId =
         ref.watch(routingProvider.select((value) => value.goalStationId));
-    //------------------// goal
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -328,9 +322,8 @@ class _LatLngTempleDisplayAlertState extends ConsumerState<LatLngTempleMapAlert>
                     const SizedBox(width: 20),
                     Expanded(
                       child: Text(
-                        (tokyoTrainState.tokyoStationMap[goalStationId] != null)
-                            ? tokyoTrainState
-                                .tokyoStationMap[goalStationId]!.stationName
+                        (widget.tokyoStationMap[goalStationId] != null)
+                            ? widget.tokyoStationMap[goalStationId]!.stationName
                             : '-----',
                         style: const TextStyle(color: Colors.white),
                       ),
@@ -538,8 +531,7 @@ class _LatLngTempleDisplayAlertState extends ConsumerState<LatLngTempleMapAlert>
     final twelveColor = utility.getTwelveColor();
 
     for (var i = 0; i < tokyoTrainState.selectTrainList.length; i++) {
-      final map =
-          tokyoTrainState.tokyoTrainIdMap[tokyoTrainState.selectTrainList[i]];
+      final map = widget.tokyoTrainIdMap[tokyoTrainState.selectTrainList[i]];
 
       final points = <LatLng>[];
       map?.station.forEach((element2) =>

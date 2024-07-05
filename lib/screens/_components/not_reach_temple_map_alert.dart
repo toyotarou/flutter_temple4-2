@@ -1,22 +1,35 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_temple4/screens/_components/not_reach_temple_train_select_alert.dart';
-import 'package:flutter_temple4/state/tokyo_train/tokyo_train.dart';
-import 'package:flutter_temple4/utility/utility.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:latlong2/latlong.dart';
 
 import '../../extensions/extensions.dart';
 import '../../models/common/temple_data.dart';
-import '../../state/temple_lat_lng/temple_lat_lng.dart';
-import '../../state/temple_list/temple_list.dart';
+import '../../models/temple_lat_lng_model.dart';
+import '../../models/temple_list_model.dart';
+
+import '../../models/tokyo_train_model.dart';
+
+//selectTrainList
+import '../../state/tokyo_train/tokyo_train.dart';
+import '../../utility/utility.dart';
 import '../_parts/_temple_dialog.dart';
 import '../function.dart';
+import 'not_reach_temple_train_select_alert.dart';
 import 'temple_info_display_alert.dart';
 
 class NotReachTempleMapAlert extends ConsumerStatefulWidget {
-  const NotReachTempleMapAlert({super.key});
+  const NotReachTempleMapAlert({
+    super.key,
+    required this.templeListList,
+    required this.templeLatLngList,
+    required this.tokyoTrainIdMap,
+  });
+
+  final List<TempleListModel> templeListList;
+  final List<TempleLatLngModel> templeLatLngList;
+  final Map<int, TokyoTrainModel> tokyoTrainIdMap;
 
   @override
   ConsumerState<NotReachTempleMapAlert> createState() =>
@@ -44,12 +57,6 @@ class _NotReachTempleMapAlertState
   @override
   void initState() {
     super.initState();
-
-    ref.read(templeListProvider.notifier).getAllTempleListTemple();
-
-    ref.read(templeLatLngProvider.notifier).getAllTempleLatLng();
-
-    ref.read(tokyoTrainProvider.notifier).getTokyoTrain();
 
     currentCenter = LatLng('35.7185071'.toDouble(), '139.5869534'.toDouble());
   }
@@ -141,45 +148,42 @@ class _NotReachTempleMapAlertState
     final jogaiTempleAddressList = <String>[];
     final jogaiTempleAddressList2 = <String>[];
 
-    ref
-        .watch(templeLatLngProvider.select((value) => value.templeLatLngList))
-        .forEach((element) {
+    widget.templeLatLngList.forEach((element) {
       jogaiTempleNameList.add(element.temple);
       jogaiTempleAddressList.add(element.address);
       jogaiTempleAddressList2.add('東京都${element.address}');
     });
 
-    final templeListList =
-        ref.watch(templeListProvider.select((value) => value.templeListList));
-
-    for (var i = 0; i < templeListList.length; i++) {
-      if (jogaiTempleNameList.contains(templeListList[i].name)) {
+    for (var i = 0; i < widget.templeListList.length; i++) {
+      if (jogaiTempleNameList.contains(widget.templeListList[i].name)) {
         continue;
       }
 
-      if (jogaiTempleAddressList.contains(templeListList[i].address)) {
+      if (jogaiTempleAddressList.contains(widget.templeListList[i].address)) {
         continue;
       }
 
-      if (jogaiTempleAddressList2.contains(templeListList[i].address)) {
+      if (jogaiTempleAddressList2.contains(widget.templeListList[i].address)) {
         continue;
       }
 
-      if (jogaiTempleAddressList.contains('東京都${templeListList[i].address}')) {
+      if (jogaiTempleAddressList
+          .contains('東京都${widget.templeListList[i].address}')) {
         continue;
       }
 
-      if (jogaiTempleAddressList2.contains('東京都${templeListList[i].address}')) {
+      if (jogaiTempleAddressList2
+          .contains('東京都${widget.templeListList[i].address}')) {
         continue;
       }
 
       templeDataList.add(
         TempleData(
-          name: templeListList[i].name,
-          address: templeListList[i].address,
-          latitude: templeListList[i].lat,
-          longitude: templeListList[i].lng,
-          mark: templeListList[i].id.toString(),
+          name: widget.templeListList[i].name,
+          address: widget.templeListList[i].address,
+          latitude: widget.templeListList[i].lat,
+          longitude: widget.templeListList[i].lng,
+          mark: widget.templeListList[i].id.toString(),
         ),
       );
     }
@@ -241,8 +245,7 @@ class _NotReachTempleMapAlertState
     final twelveColor = utility.getTwelveColor();
 
     for (var i = 0; i < tokyoTrainState.selectTrainList.length; i++) {
-      final map =
-          tokyoTrainState.tokyoTrainIdMap[tokyoTrainState.selectTrainList[i]];
+      final map = widget.tokyoTrainIdMap[tokyoTrainState.selectTrainList[i]];
 
       final points = <LatLng>[];
       map?.station.forEach((element2) =>
