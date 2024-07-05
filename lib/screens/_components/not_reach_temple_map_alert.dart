@@ -9,6 +9,7 @@ import '../../models/common/temple_data.dart';
 import '../../models/temple_lat_lng_model.dart';
 import '../../models/temple_list_model.dart';
 
+import '../../models/temple_model.dart';
 import '../../models/tokyo_train_model.dart';
 
 //selectTrainList
@@ -25,11 +26,17 @@ class NotReachTempleMapAlert extends ConsumerStatefulWidget {
     required this.templeListList,
     required this.templeLatLngList,
     required this.tokyoTrainIdMap,
+    required this.tokyoTrainList,
+    required this.templeVisitDateMap,
+    required this.dateTempleMap,
   });
 
   final List<TempleListModel> templeListList;
   final List<TempleLatLngModel> templeLatLngList;
   final Map<int, TokyoTrainModel> tokyoTrainIdMap;
+  final List<TokyoTrainModel> tokyoTrainList;
+  final Map<String, List<String>> templeVisitDateMap;
+  final Map<String, TempleModel> dateTempleMap;
 
   @override
   ConsumerState<NotReachTempleMapAlert> createState() =>
@@ -98,7 +105,9 @@ class _NotReachTempleMapAlertState
 
                         TempleDialog(
                           context: context,
-                          widget: const NotReachTempleTrainSelectAlert(),
+                          widget: NotReachTempleTrainSelectAlert(
+                            tokyoTrainList: widget.tokyoTrainList,
+                          ),
                           paddingRight: context.screenSize.width * 0.2,
                           clearBarrierColor: true,
                         );
@@ -208,6 +217,8 @@ class _NotReachTempleMapAlertState
                   widget: TempleInfoDisplayAlert(
                     temple: templeDataList[i],
                     from: 'NotReachTempleMapAlert',
+                    templeVisitDateMap: widget.templeVisitDateMap,
+                    dateTempleMap: widget.dateTempleMap,
                   ),
                   paddingTop: context.screenSize.height * 0.7,
                   clearBarrierColor: true,

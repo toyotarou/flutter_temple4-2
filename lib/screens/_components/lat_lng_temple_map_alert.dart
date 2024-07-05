@@ -9,10 +9,12 @@ import 'package:latlong2/latlong.dart';
 import '../../extensions/extensions.dart';
 import '../../models/common/temple_data.dart';
 import '../../models/lat_lng_temple_model.dart';
+import '../../models/temple_model.dart';
 import '../../models/tokyo_station_model.dart';
 import '../../models/tokyo_train_model.dart';
 import '../../state/lat_lng_temple/lat_lng_temple.dart';
 import '../../state/routing/routing.dart';
+import '../../state/temple/temple.dart';
 import '../../state/tokyo_train/tokyo_train.dart';
 import '../../utility/utility.dart';
 import '../_parts/_caution_dialog.dart';
@@ -31,6 +33,8 @@ class LatLngTempleMapAlert extends ConsumerStatefulWidget {
     required this.tokyoTrainList,
     required this.tokyoStationMap,
     required this.tokyoTrainIdMap,
+    required this.templeVisitDateMap,
+    required this.dateTempleMap,
   });
 
   final List<LatLngTempleModel> templeList;
@@ -39,6 +43,8 @@ class LatLngTempleMapAlert extends ConsumerStatefulWidget {
   final List<TokyoTrainModel> tokyoTrainList;
   final Map<String, TokyoStationModel> tokyoStationMap;
   final Map<int, TokyoTrainModel> tokyoTrainIdMap;
+  final Map<String, List<String>> templeVisitDateMap;
+  final Map<String, TempleModel> dateTempleMap;
 
   @override
   ConsumerState<LatLngTempleMapAlert> createState() =>
@@ -68,8 +74,6 @@ class _LatLngTempleDisplayAlertState extends ConsumerState<LatLngTempleMapAlert>
   @override
   void initState() {
     super.initState();
-
-//    ref.read(tokyoTrainProvider.notifier).getTokyoTrain();
 
     currentCenter =
         LatLng(widget.station!.lat.toDouble(), widget.station!.lng.toDouble());
@@ -199,7 +203,9 @@ class _LatLngTempleDisplayAlertState extends ConsumerState<LatLngTempleMapAlert>
 
                       TempleDialog(
                         context: context,
-                        widget: const NotReachTempleTrainSelectAlert(),
+                        widget: NotReachTempleTrainSelectAlert(
+                          tokyoTrainList: widget.tokyoTrainList,
+                        ),
                         paddingRight: context.screenSize.width * 0.2,
                         clearBarrierColor: true,
                       );
@@ -403,6 +409,8 @@ class _LatLngTempleDisplayAlertState extends ConsumerState<LatLngTempleMapAlert>
                             temple: templeDataList[i],
                             from: 'LatLngTempleMapAlert',
                             station: widget.station,
+                            templeVisitDateMap: widget.templeVisitDateMap,
+                            dateTempleMap: widget.dateTempleMap,
                           ),
                           paddingTop: context.screenSize.height * 0.7,
                           clearBarrierColor: true,

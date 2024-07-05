@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_temple4/state/tokyo_train/tokyo_train.dart';
 
 import '../../extensions/extensions.dart';
+import '../../models/tokyo_train_model.dart';
+import '../../state/tokyo_train/tokyo_train.dart';
 import '../_parts/_caution_dialog.dart';
 
 class NotReachTempleTrainSelectAlert extends ConsumerStatefulWidget {
-  const NotReachTempleTrainSelectAlert({super.key});
+  const NotReachTempleTrainSelectAlert(
+      {super.key, required this.tokyoTrainList});
+
+  final List<TokyoTrainModel> tokyoTrainList;
 
   @override
   ConsumerState<NotReachTempleTrainSelectAlert> createState() =>
@@ -15,14 +19,6 @@ class NotReachTempleTrainSelectAlert extends ConsumerStatefulWidget {
 
 class _NotReachTempleTrainSelectAlertState
     extends ConsumerState<NotReachTempleTrainSelectAlert> {
-  ///
-  @override
-  void initState() {
-    super.initState();
-
-    ref.read(tokyoTrainProvider.notifier).getTokyoTrain();
-  }
-
   ///
   @override
   Widget build(BuildContext context) {
@@ -56,7 +52,7 @@ class _NotReachTempleTrainSelectAlertState
 
     final tokyoTrainState = ref.watch(tokyoTrainProvider);
 
-    tokyoTrainState.tokyoTrainList.forEach((element) {
+    widget.tokyoTrainList.forEach((element) {
       list.add(
         CheckboxListTile(
           contentPadding: EdgeInsets.zero,

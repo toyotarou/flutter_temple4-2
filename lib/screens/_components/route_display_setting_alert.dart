@@ -2,22 +2,13 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_temple4/screens/_components/route_display_alert.dart';
-import 'package:flutter_temple4/screens/_parts/_temple_dialog.dart';
-import 'package:flutter_temple4/state/routing/routing.dart';
-
-//import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
 
 import '../../extensions/extensions.dart';
-
-// import '../../state/select_route/select_route_notifier.dart';
-// import 'museum_search_dialog.dart';
-// import 'select_route_display_alert.dart';
-//
-//
-//
+import '../../state/routing/routing.dart';
+import '../_parts/_temple_dialog.dart';
+import 'route_display_alert.dart';
 
 class RouteDisplaySettingAlert extends ConsumerWidget {
   RouteDisplaySettingAlert({super.key});
@@ -108,7 +99,8 @@ class RouteDisplaySettingAlert extends ConsumerWidget {
                                 '${selectedTime.hour.toString().padLeft(2, '0')}:${selectedTime.minute.toString().padLeft(2, '0')}';
                             await ref
                                 .read(routingProvider.notifier)
-                                .setSelectTime(time: '${DateTime.now().yyyymmdd} $time');
+                                .setSelectTime(
+                                    time: '${DateTime.now().yyyymmdd} $time');
                           }
                         },
                         child: Container(

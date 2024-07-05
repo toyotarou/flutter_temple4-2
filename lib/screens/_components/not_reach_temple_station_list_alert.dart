@@ -29,14 +29,6 @@ class _TempleNotReachStationListAlertState
 
   ///
   @override
-  void initState() {
-    super.initState();
-
-//    ref.read(templeNotReachListProvider.notifier).getAllNotReachTemple();
-  }
-
-  ///
-  @override
   Widget build(BuildContext context) {
     makeNotReachTempleIds();
 

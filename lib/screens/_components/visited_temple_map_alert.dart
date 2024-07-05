@@ -6,6 +6,7 @@ import 'package:latlong2/latlong.dart';
 
 import '../../extensions/extensions.dart';
 import '../../models/common/temple_data.dart';
+import '../../models/temple_model.dart';
 import '../../state/temple/temple.dart';
 import '../../state/temple_lat_lng/temple_lat_lng.dart';
 import '../_parts/_temple_dialog.dart';
@@ -14,7 +15,15 @@ import 'temple_info_display_alert.dart';
 import 'visited_temple_list_alert.dart';
 
 class VisitedTempleMapAlert extends ConsumerStatefulWidget {
-  const VisitedTempleMapAlert({super.key});
+  const VisitedTempleMapAlert({
+    super.key,
+    required this.templeVisitDateMap,
+    required this.dateTempleMap,
+  });
+
+  final Map<String, List<String>> templeVisitDateMap;
+
+  final Map<String, TempleModel> dateTempleMap;
 
   @override
   ConsumerState<VisitedTempleMapAlert> createState() =>
@@ -69,7 +78,10 @@ class _VisitedTempleMapAlertState extends ConsumerState<VisitedTempleMapAlert> {
                       onPressed: () {
                         TempleDialog(
                           context: context,
-                          widget: const VisitedTempleListAlert(),
+                          widget: VisitedTempleListAlert(
+                            templeVisitDateMap: widget.templeVisitDateMap,
+                            dateTempleMap: widget.dateTempleMap,
+                          ),
                           paddingLeft: context.screenSize.width * 0.1,
                         );
                       },
@@ -86,7 +98,10 @@ class _VisitedTempleMapAlertState extends ConsumerState<VisitedTempleMapAlert> {
 
                           TempleDialog(
                             context: context,
-                            widget: const VisitedTempleMapAlert(),
+                            widget: VisitedTempleMapAlert(
+                              templeVisitDateMap: widget.templeVisitDateMap,
+                              dateTempleMap: widget.dateTempleMap,
+                            ),
                             clearBarrierColor: true,
                           );
                         },
@@ -204,6 +219,8 @@ class _VisitedTempleMapAlertState extends ConsumerState<VisitedTempleMapAlert> {
                         widget: TempleInfoDisplayAlert(
                           temple: templeDataList[i],
                           from: 'VisitedTempleMapAlert',
+                          templeVisitDateMap: widget.templeVisitDateMap,
+                          dateTempleMap: widget.dateTempleMap,
                         ),
                         paddingTop: context.screenSize.height * 0.6,
                         clearBarrierColor: true,

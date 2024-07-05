@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_temple4/state/temple_list/temple_list.dart';
 
 import '../../extensions/extensions.dart';
+import '../../models/temple_model.dart';
 import '../../state/lat_lng_temple/lat_lng_temple.dart';
 import '../../state/routing/routing.dart';
 import '../../state/tokyo_train/tokyo_train.dart';
@@ -12,7 +13,14 @@ import 'lat_lng_temple_map_alert.dart';
 import 'not_reach_temple_station_list_alert.dart';
 
 class TempleTrainStationListAlert extends ConsumerStatefulWidget {
-  const TempleTrainStationListAlert({super.key});
+  const TempleTrainStationListAlert({
+    super.key,
+    required this.templeVisitDateMap,
+    required this.dateTempleMap,
+  });
+
+  final Map<String, List<String>> templeVisitDateMap;
+  final Map<String, TempleModel> dateTempleMap;
 
   @override
   ConsumerState<TempleTrainStationListAlert> createState() =>
@@ -127,6 +135,8 @@ class _TempleTrainListAlertState
                           tokyoTrainList: tokyoTrainState.tokyoTrainList,
                           tokyoStationMap: tokyoTrainState.tokyoStationMap,
                           tokyoTrainIdMap: tokyoTrainState.tokyoTrainIdMap,
+                          templeVisitDateMap: widget.templeVisitDateMap,
+                          dateTempleMap: widget.dateTempleMap,
                         ),
                       );
                     },
