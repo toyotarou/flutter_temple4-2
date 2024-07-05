@@ -6,6 +6,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../extensions/extensions.dart';
 import '../models/common/temple_data.dart';
+import '../models/tokyo_station_model.dart';
 import '../state/routing/routing.dart';
 import '../state/temple/temple.dart';
 
@@ -119,6 +120,63 @@ List<int> makeTempleVisitYearList({required WidgetRef ref}) {
       list.add(element.date.year);
     }
   });
+
+  return list;
+}
+
+///
+List<TokyoStationModel> getNearTokyoStation({
+  required TempleData temple,
+  required Map<String, TokyoStationModel> tokyoStationMap,
+}) {
+  final list = <TokyoStationModel>[];
+
+  final map = <double, List<TokyoStationModel>>{};
+
+  final distanceList = <double>[];
+
+  var distance = '';
+  tokyoStationMap
+    ..forEach((key, value) {
+      distance = calcDistance(
+        originLat: temple.latitude.toDouble(),
+        originLng: temple.longitude.toDouble(),
+        destLat: value.lat.toDouble(),
+        destLng: value.lng.toDouble(),
+      );
+
+      if (distance.toDouble() < 3.0) {
+        map[distance.toDouble()] = [];
+
+        distanceList.add(distance.toDouble());
+      }
+    })
+    ..forEach((key, value) {
+      distance = calcDistance(
+        originLat: temple.latitude.toDouble(),
+        originLng: temple.longitude.toDouble(),
+        destLat: value.lat.toDouble(),
+        destLng: value.lng.toDouble(),
+      );
+
+      if (distance.toDouble() < 3.0) {
+        map[distance.toDouble()]?.add(value);
+      }
+    });
+
+  final stationNames = <String>[];
+
+  distanceList
+    ..sort()
+    ..forEach((element) {
+      map[element]?.forEach((element2) {
+        if (!stationNames.contains(element2.stationName)) {
+          list.add(element2);
+        }
+
+        stationNames.add(element2.stationName);
+      });
+    });
 
   return list;
 }

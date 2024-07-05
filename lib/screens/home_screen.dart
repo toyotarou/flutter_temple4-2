@@ -194,10 +194,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     final tokyoStationMap =
         ref.read(tokyoTrainProvider.select((value) => value.tokyoStationMap));
 
-    var templeListMap =
+    final templeListMap =
         ref.watch(templeListProvider.select((value) => value.templeListMap));
 
-    var stationMap =
+    final stationMap =
         ref.watch(stationProvider.select((value) => value.stationMap));
 
     return Row(

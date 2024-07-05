@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:flutter_map_animations/flutter_map_animations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:latlong2/latlong.dart';
 
 import '../../extensions/extensions.dart';
 import '../../models/common/temple_data.dart';
-import '../../models/station_model.dart';
 import '../../models/temple_lat_lng_model.dart';
 import '../../models/temple_list_model.dart';
 
@@ -49,8 +50,8 @@ class NotReachTempleMapAlert extends ConsumerStatefulWidget {
       _NotReachTempleMapAlertState();
 }
 
-class _NotReachTempleMapAlertState
-    extends ConsumerState<NotReachTempleMapAlert> {
+class _NotReachTempleMapAlertState extends ConsumerState<NotReachTempleMapAlert>
+    with TickerProviderStateMixin {
   List<TempleData> templeDataList = [];
 
   Map<String, double> boundsLatLngMap = {};
@@ -59,7 +60,7 @@ class _NotReachTempleMapAlertState
 
   List<Marker> markerList = [];
 
-  MapController mapController = MapController();
+  late final _animatedMapController = AnimatedMapController(vsync: this);
   late LatLng currentCenter;
 
   List<Polyline> polylineList = [];
@@ -105,9 +106,18 @@ class _NotReachTempleMapAlertState
                       templeDataList.length.toString(),
                       style: const TextStyle(color: Colors.white),
                     ),
+                    Container(),
+                  ],
+                ),
+              ),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
                     IconButton(
                       onPressed: () {
-                        mapController.move(currentCenter, 10);
+                        _animatedMapController.move(currentCenter, 10);
 
                         TempleDialog(
                           context: context,
@@ -120,12 +130,34 @@ class _NotReachTempleMapAlertState
                       },
                       icon: const Icon(Icons.train, color: Colors.white),
                     ),
+                    Row(
+                      children: [
+                        IconButton(
+                          onPressed: () {
+                            _animatedMapController.animatedZoomIn();
+                          },
+                          icon: const Icon(
+                            FontAwesomeIcons.plus,
+                            color: Colors.white,
+                          ),
+                        ),
+                        IconButton(
+                          onPressed: () {
+                            _animatedMapController.animatedZoomOut();
+                          },
+                          icon: const Icon(
+                            FontAwesomeIcons.minus,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ],
+                    ),
                   ],
                 ),
               ),
               Expanded(
                 child: FlutterMap(
-                  mapController: mapController,
+                  mapController: _animatedMapController,
                   options: MapOptions(
                     bounds: LatLngBounds(
                       LatLng(

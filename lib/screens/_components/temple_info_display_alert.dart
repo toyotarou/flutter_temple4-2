@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../extensions/extensions.dart';
 import '../../models/common/temple_data.dart';
-import '../../models/station_model.dart';
 import '../../models/temple_list_model.dart';
 import '../../models/temple_model.dart';
 import '../../models/tokyo_station_model.dart';
@@ -209,10 +208,20 @@ class _TempleInfoDisplayAlertState
       return Container();
     }
 
-    List<Widget> list = [];
+    final list = <Widget>[];
 
-    list.add(Text(widget.temple.latitude));
+    getNearTokyoStation(
+      temple: widget.temple,
+      tokyoStationMap: widget.tokyoStationMap,
+    ).forEach((element) {
+      list.add(SizedBox(
+          width: context.screenSize.width / 4,
+          child: Text(element.stationName)));
+    });
 
-    return Column(children: list);
+    return SizedBox(
+      height: context.screenSize.height / 10,
+      child: SingleChildScrollView(child: Wrap(children: list)),
+    );
   }
 }
