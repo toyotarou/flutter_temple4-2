@@ -117,6 +117,8 @@ class _TempleTrainListAlertState
                           templeList: latLngTempleList,
                           station:
                               tokyoTrainState.tokyoStationMap[startStationId],
+                          tokyoTrainList: tokyoTrainState.tokyoTrainList,
+                          tokyoStationMap: tokyoTrainState.tokyoStationMap,
                         ),
                       );
                     },

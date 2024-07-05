@@ -212,9 +212,6 @@ class _TempleInfoDisplayAlertState
       return Container();
     }
 
-    final stationMap =
-        ref.watch(stationProvider.select((value) => value.stationMap));
-
     final templeListMap =
         ref.watch(templeListProvider.select((value) => value.templeListMap));
 
@@ -224,8 +221,8 @@ class _TempleInfoDisplayAlertState
             ?.nearStation
             .split(',')
             .forEach((element) {
-          final exElement = element.trim().split('-');
-          print(stationMap[exElement[1]]?.stationName);
+          // final exElement = element.trim().split('-');
+          // print(widget.stationMap[exElement[1]]?.stationName);
         });
       }
     }

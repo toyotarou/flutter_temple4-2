@@ -1,14 +1,23 @@
+// ignore_for_file: must_be_immutable, use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../extensions/extensions.dart';
 import '../../models/common/temple_data.dart';
 import '../../models/tokyo_station_model.dart';
+import '../../models/tokyo_train_model.dart';
 import '../../state/routing/routing.dart';
-import '../../state/tokyo_train/tokyo_train.dart';
 
 class GoalStationSettingAlert extends ConsumerStatefulWidget {
-  const GoalStationSettingAlert({super.key});
+  const GoalStationSettingAlert({
+    super.key,
+    required this.tokyoTrainList,
+    required this.tokyoStationMap,
+  });
+
+  final List<TokyoTrainModel> tokyoTrainList;
+  final Map<String, TokyoStationModel> tokyoStationMap;
 
   @override
   ConsumerState<GoalStationSettingAlert> createState() =>
@@ -17,14 +26,6 @@ class GoalStationSettingAlert extends ConsumerStatefulWidget {
 
 class _GoalStationSettingAlertState
     extends ConsumerState<GoalStationSettingAlert> {
-  ///
-  @override
-  void initState() {
-    super.initState();
-
-    ref.read(tokyoTrainProvider.notifier).getTokyoTrain();
-  }
-
   ///
   @override
   Widget build(BuildContext context) {
@@ -51,12 +52,10 @@ class _GoalStationSettingAlertState
 
   ///
   Widget displayGoalTrain() {
-    final tokyoTrainState = ref.watch(tokyoTrainProvider);
-
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: tokyoTrainState.tokyoTrainList.map((e) {
+        children: widget.tokyoTrainList.map((e) {
           return ExpansionTile(
             collapsedIconColor: Colors.white,
             title: Text(e.trainName,
@@ -71,8 +70,6 @@ class _GoalStationSettingAlertState
 
   ///
   Widget displayGoalStation({required TokyoStationModel data}) {
-    final tokyoTrainState = ref.watch(tokyoTrainProvider);
-
     final goalStationId =
         ref.watch(routingProvider.select((value) => value.goalStationId));
 
@@ -102,7 +99,7 @@ class _GoalStationSettingAlertState
                     .read(routingProvider.notifier)
                     .setGoalStationId(id: data.id);
 
-                final station = tokyoTrainState.tokyoStationMap[data.id];
+                final station = widget.tokyoStationMap[data.id];
 
                 ref.read(routingProvider.notifier).setRouting(
                       templeData: TempleData(
@@ -112,7 +109,7 @@ class _GoalStationSettingAlertState
                         longitude: (station != null) ? station.lng : '',
                         mark: (station != null) ? station.id : '',
                       ),
-                      station: tokyoTrainState.tokyoStationMap[startStationId],
+                      station: widget.tokyoStationMap[startStationId],
                     );
 
                 Navigator.pop(context);
