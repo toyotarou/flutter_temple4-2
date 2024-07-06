@@ -9,6 +9,7 @@ import 'package:latlong2/latlong.dart';
 import '../../extensions/extensions.dart';
 import '../../models/common/temple_data.dart';
 import '../../models/lat_lng_temple_model.dart';
+import '../../models/station_model.dart';
 import '../../models/temple_list_model.dart';
 import '../../models/temple_model.dart';
 import '../../models/tokyo_station_model.dart';
@@ -36,6 +37,7 @@ class LatLngTempleMapAlert extends ConsumerStatefulWidget {
     required this.templeVisitDateMap,
     required this.dateTempleMap,
     required this.templeListMap,
+    required this.stationMap,
   });
 
   final List<LatLngTempleModel> templeList;
@@ -47,6 +49,7 @@ class LatLngTempleMapAlert extends ConsumerStatefulWidget {
   final Map<String, List<String>> templeVisitDateMap;
   final Map<String, TempleModel> dateTempleMap;
   final Map<String, TempleListModel> templeListMap;
+  final Map<String, StationModel> stationMap;
 
   @override
   ConsumerState<LatLngTempleMapAlert> createState() =>
@@ -414,7 +417,7 @@ class _LatLngTempleDisplayAlertState extends ConsumerState<LatLngTempleMapAlert>
                             templeVisitDateMap: widget.templeVisitDateMap,
                             dateTempleMap: widget.dateTempleMap,
                             templeListMap: widget.templeListMap,
-                            tokyoStationMap: widget.tokyoStationMap,
+                            stationMap: widget.stationMap,
                           ),
                           paddingTop: context.screenSize.height * 0.6,
                           clearBarrierColor: true,

@@ -1,8 +1,11 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../extensions/extensions.dart';
 import '../../models/common/temple_data.dart';
+import '../../models/station_model.dart';
 import '../../models/temple_list_model.dart';
 import '../../models/temple_model.dart';
 import '../../models/tokyo_station_model.dart';
@@ -20,7 +23,7 @@ class TempleInfoDisplayAlert extends ConsumerStatefulWidget {
     required this.templeVisitDateMap,
     required this.dateTempleMap,
     required this.templeListMap,
-    required this.tokyoStationMap,
+    required this.stationMap,
   });
 
   final TempleData temple;
@@ -29,7 +32,7 @@ class TempleInfoDisplayAlert extends ConsumerStatefulWidget {
   final Map<String, List<String>> templeVisitDateMap;
   final Map<String, TempleModel> dateTempleMap;
   final Map<String, TempleListModel> templeListMap;
-  final Map<String, TokyoStationModel> tokyoStationMap;
+  final Map<String, StationModel> stationMap;
 
   @override
   ConsumerState<TempleInfoDisplayAlert> createState() =>
@@ -210,18 +213,52 @@ class _TempleInfoDisplayAlertState
 
     final list = <Widget>[];
 
-    getNearTokyoStation(
-      temple: widget.temple,
-      tokyoStationMap: widget.tokyoStationMap,
-    ).forEach((element) {
-      list.add(SizedBox(
-          width: context.screenSize.width / 4,
-          child: Text(element.stationName)));
-    });
+    if (widget.templeListMap[widget.temple.name] != null) {
+      widget.templeListMap[widget.temple.name]!.nearStation
+          .split(',')
+          .forEach((element) {
+        if (element != '') {
+          var exElement = element.trim().split('-');
+
+          if (exElement.isNotEmpty) {
+            var station = widget.stationMap[exElement[1]];
+
+            if (station != null) {
+              list.add(
+                Row(
+                  children: [
+                    GestureDetector(
+                      onTap: () {},
+                      child: CircleAvatar(
+                        radius: 30,
+                        backgroundColor: Colors.purpleAccent.withOpacity(0.3),
+                        child: FittedBox(
+                          child: Text(
+                            station.stationName,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(fontSize: 12),
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                  ],
+                ),
+              );
+            }
+          }
+        }
+      });
+    }
 
     return SizedBox(
+      width: double.infinity,
       height: context.screenSize.height / 10,
-      child: SingleChildScrollView(child: Wrap(children: list)),
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Row(children: list),
+      ),
     );
   }
 }

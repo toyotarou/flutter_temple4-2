@@ -200,6 +200,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     final stationMap =
         ref.watch(stationProvider.select((value) => value.stationMap));
 
+
+
+
+
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -249,6 +254,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     tokyoTrainIdMap: tokyoTrainIdMap,
                     tokyoTrainList: tokyoTrainList,
                     templeListMap: templeListMap,
+                    stationMap: stationMap,
                   ),
                 ),
                 icon: const Icon(Icons.train, color: Colors.white),
@@ -264,7 +270,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     templeVisitDateMap: templeVisitDateMap,
                     dateTempleMap: dateTempleMap,
                     templeListMap: templeListMap,
-                    tokyoStationMap: tokyoStationMap,
+                    stationMap: stationMap,
                   ),
                 ),
                 icon:

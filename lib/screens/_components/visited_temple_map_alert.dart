@@ -236,7 +236,7 @@ class _VisitedTempleMapAlertState extends ConsumerState<VisitedTempleMapAlert> {
                           templeVisitDateMap: widget.templeVisitDateMap,
                           dateTempleMap: widget.dateTempleMap,
                           templeListMap: widget.templeListMap,
-                          tokyoStationMap: widget.tokyoStationMap,
+                          stationMap: widget.stationMap,
                         ),
                         paddingTop: context.screenSize.height * 0.6,
                         clearBarrierColor: true,
