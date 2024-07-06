@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_temple4/state/not_reach_temple/not_reach_temple.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../extensions/extensions.dart';
@@ -47,6 +48,17 @@ Color? getCircleAvatarBgColor(
     if (pos != -1) {
       color = Colors.indigo.withOpacity(0.5);
     }
+  }
+
+  final selectedNotReachTempleId = ref.watch(
+      notReachTempleProvider.select((value) => value.selectedNotReachTempleId));
+
+  if (selectedNotReachTempleId == element.mark) {
+    color = Colors.green[900]?.withOpacity(0.5);
+  }
+
+  if (element.mark == 'not_reach_temple_map_add_station') {
+    color = Colors.redAccent.withOpacity(0.5);
   }
 
   return color;

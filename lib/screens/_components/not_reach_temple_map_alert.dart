@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map_animations/flutter_map_animations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_temple4/state/not_reach_temple/not_reach_temple.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:latlong2/latlong.dart';
@@ -240,6 +241,26 @@ class _NotReachTempleMapAlertState extends ConsumerState<NotReachTempleMapAlert>
   void makeMarker() {
     markerList = [];
 
+    final selectedNotReachTempleId = ref.watch(notReachTempleProvider
+        .select((value) => value.selectedNotReachTempleId));
+
+    final selectedNotReachTempleStationList = ref.watch(notReachTempleProvider
+        .select((value) => value.selectedNotReachTempleStationList));
+
+    if (selectedNotReachTempleStationList.isNotEmpty) {
+      selectedNotReachTempleStationList.forEach((element) {
+        templeDataList.add(
+          TempleData(
+            name: element.stationName,
+            address: element.address,
+            latitude: element.lat,
+            longitude: element.lng,
+            mark: 'not_reach_temple_map_add_station',
+          ),
+        );
+      });
+    }
+
     for (var i = 0; i < templeDataList.length; i++) {
       markerList.add(
         Marker(
@@ -249,21 +270,28 @@ class _NotReachTempleMapAlertState extends ConsumerState<NotReachTempleMapAlert>
           ),
           builder: (context) {
             return GestureDetector(
-              onTap: () {
-                TempleDialog(
-                  context: context,
-                  widget: TempleInfoDisplayAlert(
-                    temple: templeDataList[i],
-                    from: 'NotReachTempleMapAlert',
-                    templeVisitDateMap: widget.templeVisitDateMap,
-                    dateTempleMap: widget.dateTempleMap,
-                    templeListMap: widget.templeListMap,
-                    stationMap: widget.stationMap,
-                  ),
-                  paddingTop: context.screenSize.height * 0.6,
-                  clearBarrierColor: true,
-                );
-              },
+              onTap: (selectedNotReachTempleId == '')
+                  ? () {
+                      ref
+                          .read(notReachTempleProvider.notifier)
+                          .setSelectedNotReachTempleId(
+                              id: templeDataList[i].mark);
+
+                      TempleDialog(
+                        context: context,
+                        widget: TempleInfoDisplayAlert(
+                          temple: templeDataList[i],
+                          from: 'NotReachTempleMapAlert',
+                          templeVisitDateMap: widget.templeVisitDateMap,
+                          dateTempleMap: widget.dateTempleMap,
+                          templeListMap: widget.templeListMap,
+                          stationMap: widget.stationMap,
+                        ),
+                        paddingTop: context.screenSize.height * 0.6,
+                        clearBarrierColor: true,
+                      );
+                    }
+                  : null,
               child: CircleAvatar(
                 backgroundColor: getCircleAvatarBgColor(
                   element: templeDataList[i],
@@ -272,7 +300,10 @@ class _NotReachTempleMapAlertState extends ConsumerState<NotReachTempleMapAlert>
                 child: Text(
                   (templeDataList[i].mark == '0')
                       ? 'STA'
-                      : templeDataList[i].mark.padLeft(3, '0'),
+                      : (templeDataList[i].mark ==
+                              'not_reach_temple_map_add_station')
+                          ? ''
+                          : templeDataList[i].mark.padLeft(3, '0'),
                   style: const TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,

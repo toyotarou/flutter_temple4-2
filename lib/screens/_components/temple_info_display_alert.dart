@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_temple4/state/not_reach_temple/not_reach_temple.dart';
 
 import '../../extensions/extensions.dart';
 import '../../models/common/temple_data.dart';
@@ -159,13 +160,32 @@ class _TempleInfoDisplayAlertState
 
     return Row(
       children: [
-        CircleAvatar(
-          backgroundColor:
-              getCircleAvatarBgColor(element: widget.temple, ref: ref),
-          child: Text(
-            widget.temple.mark.padLeft(2, '0'),
-            style: const TextStyle(color: Colors.white),
-          ),
+        Column(
+          children: [
+            CircleAvatar(
+              backgroundColor:
+                  getCircleAvatarBgColor(element: widget.temple, ref: ref),
+              child: Text(
+                widget.temple.mark.padLeft(2, '0'),
+                style: const TextStyle(color: Colors.white),
+              ),
+            ),
+            if (widget.from == 'NotReachTempleMapAlert') ...[
+              TextButton(
+                onPressed: () {
+                  ref
+                      .read(notReachTempleProvider.notifier)
+                      .clearSelectedNotReachTemple();
+
+                  Navigator.pop(context);
+                },
+                child: const Text(
+                  'clear',
+                  style: TextStyle(fontSize: 12),
+                ),
+              ),
+            ],
+          ],
         ),
         const SizedBox(width: 20),
       ],
@@ -226,7 +246,12 @@ class _TempleInfoDisplayAlertState
                 Row(
                   children: [
                     GestureDetector(
-                      onTap: () {},
+                      onTap: () {
+                        ref
+                            .read(notReachTempleProvider.notifier)
+                            .setSelectedNotReachTempleStationList(
+                                stationModel: station);
+                      },
                       child: CircleAvatar(
                         radius: 30,
                         backgroundColor: Colors.purpleAccent.withOpacity(0.3),
