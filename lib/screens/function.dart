@@ -6,7 +6,6 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../extensions/extensions.dart';
 import '../models/common/temple_data.dart';
-import '../models/tokyo_station_model.dart';
 import '../state/routing/routing.dart';
 import '../state/temple/temple.dart';
 

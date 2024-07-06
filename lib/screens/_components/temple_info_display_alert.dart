@@ -1,6 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../extensions/extensions.dart';
@@ -218,10 +216,10 @@ class _TempleInfoDisplayAlertState
           .split(',')
           .forEach((element) {
         if (element != '') {
-          var exElement = element.trim().split('-');
+          final exElement = element.trim().split('-');
 
           if (exElement.isNotEmpty) {
-            var station = widget.stationMap[exElement[1]];
+            final station = widget.stationMap[exElement[1]];
 
             if (station != null) {
               list.add(
