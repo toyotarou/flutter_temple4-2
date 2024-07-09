@@ -10,8 +10,10 @@ Future<void> TempleDialog({
   double paddingBottom = 0,
   double paddingLeft = 0,
   bool clearBarrierColor = false,
+  bool dismiss = true,
 }) {
   return showDialog(
+    barrierDismissible: dismiss,
     context: context,
     barrierColor: clearBarrierColor
         ? Colors.transparent

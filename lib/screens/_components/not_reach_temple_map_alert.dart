@@ -278,6 +278,7 @@ class _NotReachTempleMapAlertState extends ConsumerState<NotReachTempleMapAlert>
                               id: templeDataList[i].mark);
 
                       TempleDialog(
+                        dismiss: false,
                         context: context,
                         widget: TempleInfoDisplayAlert(
                           temple: templeDataList[i],

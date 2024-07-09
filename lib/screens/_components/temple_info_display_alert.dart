@@ -231,6 +231,16 @@ class _TempleInfoDisplayAlertState
 
     final list = <Widget>[];
 
+    var stationNames = <String>[];
+
+    var selectedNotReachTempleStationList = ref.watch(notReachTempleProvider
+        .select((value) => value.selectedNotReachTempleStationList));
+
+    var selectedStationNames = <String>[];
+    selectedNotReachTempleStationList.forEach((element) {
+      selectedStationNames.add(element.stationName);
+    });
+
     if (widget.templeListMap[widget.temple.name] != null) {
       widget.templeListMap[widget.temple.name]!.nearStation
           .split(',')
@@ -242,33 +252,40 @@ class _TempleInfoDisplayAlertState
             final station = widget.stationMap[exElement[1]];
 
             if (station != null) {
-              list.add(
-                Row(
-                  children: [
-                    GestureDetector(
-                      onTap: () {
-                        ref
-                            .read(notReachTempleProvider.notifier)
-                            .setSelectedNotReachTempleStationList(
-                                stationModel: station);
-                      },
-                      child: CircleAvatar(
-                        radius: 30,
-                        backgroundColor: Colors.purpleAccent.withOpacity(0.3),
-                        child: FittedBox(
-                          child: Text(
-                            station.stationName,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(fontSize: 12),
+              if (!stationNames.contains(station.stationName)) {
+                list.add(
+                  Row(
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          ref
+                              .read(notReachTempleProvider.notifier)
+                              .setSelectedNotReachTempleStationList(
+                                  stationModel: station);
+                        },
+                        child: CircleAvatar(
+                          radius: 30,
+                          backgroundColor: (selectedStationNames
+                                  .contains(station.stationName))
+                              ? Colors.redAccent.withOpacity(0.5)
+                              : Colors.purpleAccent.withOpacity(0.3),
+                          child: FittedBox(
+                            child: Text(
+                              station.stationName,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(fontSize: 12),
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                    const SizedBox(width: 10),
-                  ],
-                ),
-              );
+                      const SizedBox(width: 10),
+                    ],
+                  ),
+                );
+              }
+
+              stationNames.add(station.stationName);
             }
           }
         }
